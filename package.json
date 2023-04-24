@@ -1,0 +1,22 @@
+{
+  "name": "crypto-web-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "scrape": "node scripts.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucaliebenberg/crypto-web-scraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucaliebenberg/crypto-web-scraper/issues"
+  },
+  "homepage": "https://github.com/lucaliebenberg/crypto-web-scraper#readme",
+  "dependencies": {
+    "puppeteer": "^19.11.0"
+  }
+}
