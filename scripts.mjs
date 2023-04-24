@@ -45,16 +45,17 @@ const init = async () => {
   await waitTime();
 
   // make use of eval()
-  const response = await page.evaluate(() => {
-    const nodes = document.querySelectorAll(
-      ".sc-41086a84-2.kIfwNf.sc-beb003d5-3.cxLkYn.cmc-table  "
-    );
+  //   const result = await page.evaluate(() => {
+  //     const nodes = document.querySelectorAll(
+  //       ".sc-beb003d5-3.cxLkYn.cmc-table  "
+  //     );
 
-    return Array.from(nodes).map((node) => node.table);
-  });
+  //     return Array.from(nodes).map((node) => node.table);
+  //   });
 
   //   create a .json file with the data
-  fs.writeFileSync("./results.json", JSON.stringify({ data: result }, null, 2));
+  //   fs.writeFileSync("./results.json", JSON.stringify({ data: result }, null, 2));
+  console.log(result);
 
   //   page.close();
 };
