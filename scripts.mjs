@@ -1,14 +1,18 @@
 import puppeteer from "puppeteer";
 import fs from "fs";
 
+// const USERNAME = "<YOUR USERNAME>";
 // const EMAIL = "<YOUR EMAIL>";
 // const PASSWORD = "<YOUR PASSWORD>";
 
 const SELECTORS = {
   bitcoin: ".sc-aef7b723-0.LCOyB",
-  favorite: ".sc-44910c32-0.ljDIwE.sc-126cfa71-0.haLigd",
-  password: '[data-testid="current-password"]',
-  submit: '[data-testid="submit"]',
+  filter1:
+    ".sc-44910c32-0.izpqHR.sc-f6f28484-1.rLduc.landed.ButtonSwitcher__Tab",
+  filter2:
+    ".sc-44910c32-0.izpqHR.sc-f6f28484-1.rLduc.landed.ButtonSwitcher__Tab",
+  seemore: ".call-to-action",
+  load: ".sc-54c323af-1.epVkWt",
   filters: '[alt="filters"]',
   images: ".avatar.avatar--large.avatar--person:not(.avatar--noPhoto) img",
 };
@@ -28,60 +32,41 @@ const init = async () => {
     });
 
   // mouse Y scroll
-  waitTime();
+  await waitTime();
+  await waitTime();
 
   await page.waitForSelector(SELECTORS.bitcoin);
   await page.click(SELECTORS.bitcoin);
-
-  // mouse Y scroll on details page
-  waitTime();
-
-  //   await page.waitForSelector(SELECTORS.email);
-  //   await page.type(SELECTORS.email, EMAIL);
-  //   await page.type(SELECTORS.password, PASSWORD);
-  //   await page.click(SELECTORS.submit);
-
   await page.goto("https://coinmarketcap.com/currencies/bitcoin/markets/");
 
-  await page.waitForSelector(SELECTORS.favorite);
-  await page.click(SELECTORS.favorite);
+  // mouse Y scroll
+  await waitTime();
+  await waitTime();
 
-  //   await page.waitForSelector(SELECTORS.images);
+  await page.goto(
+    "https://coinmarketcap.com/currencies/bitcoin/historical-data/"
+  );
 
-  // handle load more states
-  //   const handleLoadMore = async () => {
-  //     try {
-  //       await page.$(".infiniteScrollLoadMoreButton");
-  //       await page.click(".infiniteScrollLoadMoreButton");
-  //     } catch (err) {}
-  //   };
+  // mouse Y scroll
+  await waitTime();
+  await waitTime();
 
-  //   let count = 0;
+  await page.goto("https://coinmarketcap.com/currencies/bitcoin/news/");
 
-  //   const wait = async () => {
-  //     count += 1;
-  //     await waitTime();
-  //     await handleLoadMore();
+  // mouse Y scroll
+  await waitTime();
+  await waitTime();
+  await waitTime();
 
-  //     if (count < 30) await wait();
-  //   };
+  //   make use of eval()
+  const result = await page.evaluate(() => {
+    const nodes = document.querySelectorAll(".sc-92becd6e-1.kqJeWC");
 
-  //   await wait();
+    return Array.from(nodes).map((node) => node.a);
+  });
 
-  // //   make use of eval()
-  //   const response = await page.evaluate(() => {
-  //     const nodes = document.querySelectorAll(
-  //       ".avatar.avatar--large.avatar--person:not(.avatar--noPhoto) img"
-  //     );
-
-  //     return Array.from(nodes).map((node) => node.src);
-  //   });
-
-  // //   create a .json file with the data
-  //   fs.writeFileSync(
-  //     "./results.json",
-  //     JSON.stringify({ members: result }, null, 2)
-  //   );
+  //   create a .json file with the data
+  fs.writeFileSync("./results.json", JSON.stringify({ news: result }, null, 2));
 
   page.close();
 };
