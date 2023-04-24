@@ -7,14 +7,9 @@ import fs from "fs";
 
 const SELECTORS = {
   bitcoin: ".sc-aef7b723-0.LCOyB",
-  filter1:
-    ".sc-44910c32-0.izpqHR.sc-f6f28484-1.rLduc.landed.ButtonSwitcher__Tab",
-  filter2:
-    ".sc-44910c32-0.izpqHR.sc-f6f28484-1.rLduc.landed.ButtonSwitcher__Tab",
-  seemore: ".call-to-action",
-  load: ".sc-54c323af-1.epVkWt",
-  filters: '[alt="filters"]',
-  images: ".avatar.avatar--large.avatar--person:not(.avatar--noPhoto) img",
+  markets: ".sc-44910c32-0.izpqHR.sc-da999c6-0.iXEJbj.cmc-link",
+  historical: ".sc-44910c32-0.izpqHR.sc-da999c6-0.iXEJbj.cmc-link",
+  date: ".sc-44910c32-0.hxDdxF",
 };
 
 const init = async () => {
@@ -39,36 +34,29 @@ const init = async () => {
   await page.click(SELECTORS.bitcoin);
   await page.goto("https://coinmarketcap.com/currencies/bitcoin/markets/");
 
-  // mouse Y scroll
-  await waitTime();
-  await waitTime();
+  await page.waitForSelector(SELECTORS.markets);
+  await page.click(SELECTORS.markets);
 
-  await page.goto(
-    "https://coinmarketcap.com/currencies/bitcoin/historical-data/"
-  );
+  await page.waitForSelector(SELECTORS.historical);
+  await page.click(SELECTORS.historical);
 
   // mouse Y scroll
   await waitTime();
   await waitTime();
 
-  await page.goto("https://coinmarketcap.com/currencies/bitcoin/news/");
+  // make use of eval()
+  const response = await page.evaluate(() => {
+    const nodes = document.querySelectorAll(
+      ".sc-41086a84-2.kIfwNf.sc-beb003d5-3.cxLkYn.cmc-table  "
+    );
 
-  // mouse Y scroll
-  await waitTime();
-  await waitTime();
-  await waitTime();
-
-  //   make use of eval()
-  const result = await page.evaluate(() => {
-    const nodes = document.querySelectorAll(".sc-92becd6e-1.kqJeWC");
-
-    return Array.from(nodes).map((node) => node.a);
+    return Array.from(nodes).map((node) => node.table);
   });
 
   //   create a .json file with the data
-  fs.writeFileSync("./results.json", JSON.stringify({ news: result }, null, 2));
+  fs.writeFileSync("./results.json", JSON.stringify({ data: result }, null, 2));
 
-  page.close();
+  //   page.close();
 };
 
 init();
